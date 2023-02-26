@@ -1,14 +1,22 @@
-from flask import Flask
+from flask import render_template, url_for, request
 
-app = Flask(__name__)
+from models import db, Pet, app
+
 
 @app.route('/')
 def index():
-    return 'Hello from Pet Adoption'
+    return render_template('index.html')
 
-@app.route('/dog')
-def bark():
-    return 'arf'
+@app.route('/pet')
+def pet():
+    return render_template('pet.html')
+
+@app.route('/add-pet', methods=['GET', 'POST'])
+def add_pet():
+    print(request.form)
+    return render_template('addpet.html')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8000, host='127.0.0.1')
+    with app.app_context():
+        db.create_all()
+    app.run(debug=True, port=8000, host='0.0.0.0')
